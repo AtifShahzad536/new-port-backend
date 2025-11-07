@@ -1,2 +1,33 @@
-node_modules
+# Dependencies
+node_modules/
+
+# Environment
 .env
+.env.local
+.env.*.local
+
+# Logs
+logs/
+*.log
+*.log.*
+
+# Build/cache
+dist/
+build/
+.cache/
+.tmp/
+.temp/
+
+# Coverage
+coverage/
+.nyc_output/
+
+# IDE/OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Uploads (keep folder, ignore files)
+public/uploads/*
+!public/uploads/.gitkeep
