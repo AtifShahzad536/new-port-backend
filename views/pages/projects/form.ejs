@@ -1,0 +1,56 @@
+<section class="py-6 max-w-2xl">
+  <div class="flex items-center justify-between gap-3">
+    <h1 class="text-2xl font-bold flex items-center gap-2">
+      <i data-lucide="pencil" class="w-6 h-6 text-indigo-600"></i>
+      <%= mode === 'edit' ? 'Edit Project' : 'New Project' %>
+    </h1>
+    <a href="/projects" class="inline-flex items-center gap-2 border px-3 py-2 rounded-md text-sm hover:bg-gray-50">
+      <i data-lucide="arrow-left" class="w-4 h-4"></i>
+      Back
+    </a>
+  </div>
+
+  <form class="mt-6 space-y-4" method="post" enctype="multipart/form-data" action="<%= mode === 'edit' ? '/projects/' + project._id : '/projects' %>">
+    <div>
+      <label class="block text-sm font-medium text-gray-700">Title</label>
+      <input name="title" required class="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" value="<%= project.title || '' %>" />
+    </div>
+    <div>
+      <label class="block text-sm font-medium text-gray-700">Description</label>
+      <textarea name="description" rows="4" class="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"><%= project.description || '' %></textarea>
+    </div>
+    <div class="grid md:grid-cols-2 gap-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Upload Image</label>
+        <input name="image" type="file" accept="image/*" class="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 bg-white" />
+        <p class="text-xs text-gray-500 mt-1">PNG, JPG up to 5MB. If no file chosen, existing URL will be used.</p>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Or Image URL</label>
+        <input name="imageUrl" type="url" placeholder="https://..." class="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" value="<%= project.imageUrl || '' %>" />
+        <% if (project.imageUrl) { %>
+          <img src="<%= project.imageUrl %>" alt="preview" class="mt-2 h-24 w-24 object-cover rounded border" />
+        <% } %>
+      </div>
+    </div>
+    <div>
+      <label class="block text-sm font-medium text-gray-700">URL</label>
+      <input name="url" type="url" class="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" value="<%= project.url || '' %>" />
+    </div>
+    <div>
+      <label class="block text-sm font-medium text-gray-700">Tags (comma separated)</label>
+      <input name="tags" class="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" value="<%= (project.tags || []).join(', ') %>" />
+    </div>
+    <div class="flex items-center gap-2">
+      <input id="featured" name="featured" type="checkbox" <%= project.featured ? 'checked' : '' %> />
+      <label for="featured" class="text-sm text-gray-700">Featured</label>
+    </div>
+
+    <div class="pt-2">
+      <button type="submit" class="inline-flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-md text-sm hover:bg-indigo-700">
+        <i data-lucide="save" class="w-4 h-4"></i>
+        <%= mode === 'edit' ? 'Update' : 'Create' %>
+      </button>
+    </div>
+  </form>
+</section>

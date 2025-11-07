@@ -1,0 +1,78 @@
+<section class="py-6">
+  <div class="flex items-center justify-between gap-3">
+    <h1 class="text-2xl font-bold flex items-center gap-2">
+      <i data-lucide="briefcase" class="w-6 h-6 text-indigo-600"></i>
+      Projects
+    </h1>
+    <a href="/projects/new" class="inline-flex items-center gap-2 bg-indigo-600 text-white px-3 py-2 rounded-md text-sm hover:bg-indigo-700">
+      <i data-lucide="plus" class="w-4 h-4"></i>
+      New Project
+    </a>
+  </div>
+
+  <div class="mt-6 bg-white border border-gray-200 rounded-lg overflow-hidden">
+    <table class="min-w-full text-sm">
+      <thead class="bg-gray-50 text-gray-600">
+        <tr>
+          <th class="text-left px-4 py-2">Image</th>
+          <th class="text-left px-4 py-2">Title</th>
+          <th class="text-left px-4 py-2">URL</th>
+          <th class="text-left px-4 py-2">Tags</th>
+          <th class="text-left px-4 py-2">Featured</th>
+          <th class="text-right px-4 py-2">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (projects && projects.length) { %>
+          <% projects.forEach(p => { %>
+            <tr class="border-t">
+              <td class="px-4 py-2">
+                <% if (p.imageUrl) { %>
+                  <img src="<%= p.imageUrl %>" alt="thumb" class="h-10 w-10 object-cover rounded border" />
+                <% } else { %>
+                  —
+                <% } %>
+              </td>
+              <td class="px-4 py-2 font-medium"><%= p.title %></td>
+              <td class="px-4 py-2 text-indigo-600">
+                <% if (p.url) { %>
+                  <a class="hover:underline" href="<%= p.url %>" target="_blank" rel="noreferrer"><%= p.url %></a>
+                <% } else { %>
+                  —
+                <% } %>
+              </td>
+              <td class="px-4 py-2">
+                <% if (p.tags && p.tags.length) { %>
+                  <div class="flex flex-wrap gap-1">
+                    <% p.tags.forEach(t => { %>
+                      <span class="inline-block bg-gray-100 border border-gray-200 text-gray-700 px-2 py-0.5 rounded-full text-xs"><%= t %></span>
+                    <% }) %>
+                  </div>
+                <% } else { %>
+                  —
+                <% } %>
+              </td>
+              <td class="px-4 py-2"><%= p.featured ? 'Yes' : 'No' %></td>
+              <td class="px-4 py-2">
+                <div class="flex items-center gap-2 justify-end">
+                  <a href="/projects/<%= p._id %>/edit" class="inline-flex items-center gap-1 text-indigo-600 hover:underline">
+                    <i data-lucide="pencil" class="w-4 h-4"></i> Edit
+                  </a>
+                  <form action="/projects/<%= p._id %>/delete" method="post" onsubmit="return confirm('Delete this project?')">
+                    <button class="inline-flex items-center gap-1 text-red-600 hover:underline" type="submit">
+                      <i data-lucide="trash" class="w-4 h-4"></i> Delete
+                    </button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+          <% }) %>
+        <% } else { %>
+          <tr>
+            <td class="px-4 py-6 text-center text-gray-500" colspan="5">No projects yet.</td>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</section>

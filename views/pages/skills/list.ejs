@@ -1,0 +1,56 @@
+<section class="py-6">
+  <div class="flex items-center justify-between gap-3">
+    <h1 class="text-2xl font-bold flex items-center gap-2">
+      <i data-lucide="sparkles" class="w-6 h-6 text-indigo-600"></i>
+      Skills
+    </h1>
+    <a href="/skills/new" class="inline-flex items-center gap-2 bg-indigo-600 text-white px-3 py-2 rounded-md text-sm hover:bg-indigo-700">
+      <i data-lucide="plus" class="w-4 h-4"></i>
+      New Skill
+    </a>
+  </div>
+
+  <div class="mt-6 bg-white border border-gray-200 rounded-lg overflow-hidden">
+    <table class="min-w-full text-sm">
+      <thead class="bg-gray-50 text-gray-600">
+        <tr>
+          <th class="text-left px-4 py-2">Icon</th>
+          <th class="text-left px-4 py-2">Name</th>
+          <th class="text-left px-4 py-2">Level</th>
+          <th class="text-right px-4 py-2">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (skills && skills.length) { %>
+          <% skills.forEach(s => { %>
+            <tr class="border-t">
+              <td class="px-4 py-2">
+                <% if (s.iconUrl) { %>
+                  <img src="<%= s.iconUrl %>" class="h-8 w-8 object-contain" />
+                <% } else { %>—<% } %>
+              </td>
+              <td class="px-4 py-2 font-medium"><%= s.name %></td>
+              <td class="px-4 py-2"><%= s.level %>%</td>
+              <td class="px-4 py-2">
+                <div class="flex items-center gap-2 justify-end">
+                  <a href="/skills/<%= s._id %>/edit" class="inline-flex items-center gap-1 text-indigo-600 hover:underline">
+                    <i data-lucide="pencil" class="w-4 h-4"></i> Edit
+                  </a>
+                  <form action="/skills/<%= s._id %>/delete" method="post" onsubmit="return confirm('Delete this skill?')">
+                    <button class="inline-flex items-center gap-1 text-red-600 hover:underline" type="submit">
+                      <i data-lucide="trash" class="w-4 h-4"></i> Delete
+                    </button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+          <% }) %>
+        <% } else { %>
+          <tr>
+            <td class="px-4 py-6 text-center text-gray-500" colspan="4">No skills yet.</td>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</section>

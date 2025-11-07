@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title><%= title %> - <%= appName || 'App' %></title>
+    <link rel="stylesheet" href="/public/assets/styles.css" />
+    <script src="https://unpkg.com/lucide@latest"></script>
+  </head>
+  <body class="min-h-screen bg-gray-50 text-gray-900">
+    <% if (user) { %>
+      <div class="min-h-screen flex">
+        <aside class="w-64 bg-white border-r border-gray-200 hidden md:flex md:flex-col">
+          <div class="h-14 flex items-center gap-2 px-4 border-b">
+            <i data-lucide="layout-dashboard" class="w-5 h-5 text-indigo-600"></i>
+            <span class="font-semibold"><%= appName || 'App' %></span>
+          </div>
+          <nav class="flex-1 p-3 space-y-1">
+            <a href="/dashboard" class="flex items-center gap-2 px-3 py-2 rounded-md text-sm hover:bg-gray-100 text-gray-700">
+              <i data-lucide="home" class="w-4 h-4"></i>
+              <span>Dashboard</span>
+            </a>
+            <a href="/projects" class="flex items-center gap-2 px-3 py-2 rounded-md text-sm hover:bg-gray-100 text-gray-700">
+              <i data-lucide="briefcase" class="w-4 h-4"></i>
+              <span>Projects</span>
+            </a>
+            <a href="/skills" class="flex items-center gap-2 px-3 py-2 rounded-md text-sm hover:bg-gray-100 text-gray-700">
+              <i data-lucide="sparkles" class="w-4 h-4"></i>
+              <span>Skills</span>
+            </a>
+            <a href="/tools" class="flex items-center gap-2 px-3 py-2 rounded-md text-sm hover:bg-gray-100 text-gray-700">
+              <i data-lucide="hammer" class="w-4 h-4"></i>
+              <span>Tools</span>
+            </a>
+            <a href="/contacts" class="flex items-center gap-2 px-3 py-2 rounded-md text-sm hover:bg-gray-100 text-gray-700">
+              <i data-lucide="mail" class="w-4 h-4"></i>
+              <span>Contacts</span>
+            </a>
+          </nav>
+          <div class="p-3 border-t flex items-center justify-between text-xs text-gray-500">
+            <span>&copy; <%= new Date().getFullYear() %></span>
+            <form method="post" action="/auth/logout">
+              <button class="text-red-600 hover:underline" type="submit">Logout</button>
+            </form>
+          </div>
+        </aside>
+        <main class="flex-1 p-4 md:p-6">
+          <%- body %>
+        </main>
+      </div>
+    <% } else { %>
+      <main>
+        <%- body %>
+      </main>
+    <% } %>
+    <script>
+      lucide.createIcons();
+    </script>
+  </body>
+</html>

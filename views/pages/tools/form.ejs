@@ -1,0 +1,49 @@
+<section class="py-6 max-w-2xl">
+  <div class="flex items-center justify-between gap-3">
+    <h1 class="text-2xl font-bold flex items-center gap-2">
+      <i data-lucide="hammer" class="w-6 h-6 text-indigo-600"></i>
+      <%= mode === 'edit' ? 'Edit Tool' : 'New Tool' %>
+    </h1>
+    <a href="/tools" class="inline-flex items-center gap-2 border px-3 py-2 rounded-md text-sm hover:bg-gray-50">
+      <i data-lucide="arrow-left" class="w-4 h-4"></i>
+      Back
+    </a>
+  </div>
+
+  <form class="mt-6 space-y-4" method="post" action="<%= mode === 'edit' ? '/tools/' + tool._id : '/tools' %>">
+    <div>
+      <label class="block text-sm font-medium text-gray-700">Name</label>
+      <input name="name" required class="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" value="<%= tool.name || '' %>" />
+    </div>
+    <div class="grid md:grid-cols-2 gap-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-700">React Icons Library</label>
+        <input name="iconLib" placeholder="fa | si | io5 | md | ri | etc" class="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" value="<%= tool.iconLib || '' %>" />
+        <p class="text-xs text-gray-500 mt-1">Example: fa (FontAwesome), si (SimpleIcons), io5 (Ionicons v5).</p>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700">React Icon Name</label>
+        <input name="iconName" placeholder="e.g. FaNode, SiVite" class="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" value="<%= tool.iconName || '' %>" />
+        <p class="text-xs text-gray-500 mt-1">Frontend will render: import { Icon } from react-icons/<iconLib>.</p>
+      </div>
+    </div>
+    <div>
+      <label class="block text-sm font-medium text-gray-700">Icon URL</label>
+      <input name="iconUrl" type="url" placeholder="https://..." class="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" value="<%= tool.iconUrl || '' %>" />
+      <% if (tool.iconUrl) { %>
+        <img src="<%= tool.iconUrl %>" alt="preview" class="mt-2 h-12 w-12 object-contain" />
+      <% } %>
+    </div>
+    <div>
+      <label class="block text-sm font-medium text-gray-700">Website</label>
+      <input name="website" type="url" placeholder="https://..." class="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" value="<%= tool.website || '' %>" />
+    </div>
+
+    <div class="pt-2">
+      <button type="submit" class="inline-flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-md text-sm hover:bg-indigo-700">
+        <i data-lucide="save" class="w-4 h-4"></i>
+        <%= mode === 'edit' ? 'Update' : 'Create' %>
+      </button>
+    </div>
+  </form>
+</section>
