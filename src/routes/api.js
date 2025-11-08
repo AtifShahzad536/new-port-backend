@@ -3,6 +3,7 @@ import Project from '../models/Project.js'
 import Skill from '../models/Skill.js'
 import Tool from '../models/Tool.js'
 import { submitContact } from '../controllers/contactController.js'
+import { chat as aiChat } from '../controllers/aiController.js'
 
 const router = Router()
 
@@ -28,5 +29,8 @@ router.get('/tools', async (req, res, next) => {
 })
 
 router.post('/contact', submitContact)
+
+// AI chatbot (Gemini) endpoint
+router.post('/ai/chat', aiChat)
 
 export default router
