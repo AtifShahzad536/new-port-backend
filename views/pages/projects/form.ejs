@@ -38,6 +38,19 @@
       <input name="url" type="url" class="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" value="<%= project.url || '' %>" />
     </div>
     <div>
+      <label class="block text-sm font-medium text-gray-700">GitHub URL</label>
+      <input name="github" type="url" placeholder="https://github.com/username/repo" class="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" value="<%= project.github || '' %>" />
+    </div>
+    <div>
+      <label class="block text-sm font-medium text-gray-700">Key Features</label>
+      <textarea name="features" rows="3" placeholder="One per line or comma separated" class="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"><%= (project.features || []).join('\n') %></textarea>
+      <p class="text-xs text-gray-500 mt-1">Tip: You can paste a comma separated list or write one per line.</p>
+    </div>
+    <div>
+      <label class="block text-sm font-medium text-gray-700">Technologies</label>
+      <textarea name="technologies" rows="3" placeholder="React, Node.js, MongoDB or one per line" class="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"><%= (project.technologies || []).join('\n') %></textarea>
+    </div>
+    <div>
       <label class="block text-sm font-medium text-gray-700">Tags (comma separated)</label>
       <input name="tags" class="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" value="<%= (project.tags || []).join(', ') %>" />
     </div>

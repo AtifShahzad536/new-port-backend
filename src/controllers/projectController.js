@@ -15,17 +15,29 @@ export async function showCreateForm (req, res) {
 
 export async function createProject (req, res, next) {
   try {
-    const { title, description, url, imageUrl, tags, featured } = req.body
+    const { title, description, url, github, imageUrl, tags, features, technologies, featured } = req.body
     const uploadedUrl = req.file ? `/public/uploads/${req.file.filename}` : null
+    const toArray = (v) => {
+      if (Array.isArray(v)) return v.filter(Boolean).map(s => String(s).trim()).filter(Boolean)
+      if (!v) return []
+      // support comma or newline separated strings
+      return String(v)
+        .split(/[\n,]/)
+        .map(s => s.trim())
+        .filter(Boolean)
+    }
     const doc = await Project.create({
       title,
       description,
       imageUrl: uploadedUrl || imageUrl || '',
       url,
+      github,
       tags: (tags || '')
         .split(',')
         .map(t => t.trim())
         .filter(Boolean),
+      features: toArray(features),
+      technologies: toArray(technologies),
       featured: Boolean(featured)
     })
     res.redirect('/projects')
@@ -46,8 +58,16 @@ export async function showEditForm (req, res, next) {
 
 export async function updateProject (req, res, next) {
   try {
-    const { title, description, url, imageUrl, tags, featured } = req.body
+    const { title, description, url, github, imageUrl, tags, features, technologies, featured } = req.body
     const uploadedUrl = req.file ? `/public/uploads/${req.file.filename}` : null
+    const toArray = (v) => {
+      if (Array.isArray(v)) return v.filter(Boolean).map(s => String(s).trim()).filter(Boolean)
+      if (!v) return []
+      return String(v)
+        .split(/[\n,]/)
+        .map(s => s.trim())
+        .filter(Boolean)
+    }
     await Project.findByIdAndUpdate(
       req.params.id,
       {
@@ -55,10 +75,13 @@ export async function updateProject (req, res, next) {
         description,
         imageUrl: uploadedUrl || imageUrl || '',
         url,
+        github,
         tags: (tags || '')
           .split(',')
           .map(t => t.trim())
           .filter(Boolean),
+        features: toArray(features),
+        technologies: toArray(technologies),
         featured: Boolean(featured)
       },
       { runValidators: true }

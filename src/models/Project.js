@@ -6,7 +6,10 @@ const ProjectSchema = new mongoose.Schema(
     description: { type: String, trim: true },
     imageUrl: { type: String, trim: true },
     url: { type: String, trim: true },
+    github: { type: String, trim: true },
     tags: [{ type: String }],
+    features: [{ type: String }],
+    technologies: [{ type: String }],
     featured: { type: Boolean, default: false }
   },
   { timestamps: true }
