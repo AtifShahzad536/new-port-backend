@@ -10,39 +10,45 @@
     </a>
   </div>
 
-  <form class="mt-6 space-y-4" method="post" action="<%= mode === 'edit' ? '/skills/' + skill._id : '/skills' %>">
-    <div>
-      <label class="block text-sm font-medium text-gray-700">Name</label>
-      <input name="name" required class="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" value="<%= skill.name || '' %>" />
-    </div>
-    <div>
-      <label class="block text-sm font-medium text-gray-700">Level (0-100)</label>
-      <input name="level" type="number" min="0" max="100" class="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" value="<%= skill.level ?? 0 %>" />
-    </div>
-    <div class="grid md:grid-cols-2 gap-4">
+  <div class="mt-6 bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+    <form class="space-y-4" method="post" action="<%= mode === 'edit' ? '/skills/' + skill._id : '/skills' %>">
       <div>
-        <label class="block text-sm font-medium text-gray-700">React Icons Library</label>
-        <input name="iconLib" placeholder="fa | si | io5 | md | ri | etc" class="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" value="<%= skill.iconLib || '' %>" />
-        <p class="text-xs text-gray-500 mt-1">Example: fa (FontAwesome), si (SimpleIcons), io5 (Ionicons v5).</p>
+        <label class="block text-sm font-medium text-gray-700">Name</label>
+        <input name="name" required class="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" value="<%= skill.name || '' %>" />
       </div>
       <div>
-        <label class="block text-sm font-medium text-gray-700">React Icon Name</label>
-        <input name="iconName" placeholder="e.g. FaReact, SiMongodb" class="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" value="<%= skill.iconName || '' %>" />
-        <p class="text-xs text-gray-500 mt-1">Frontend will render: import { Icon } from react-icons/<iconLib>.</p>
+        <label class="block text-sm font-medium text-gray-700">Level (0-100)</label>
+        <input name="level" type="number" min="0" max="100" class="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" value="<%= skill.level ?? 0 %>" />
+        <p class="text-xs text-gray-500 mt-1">How proficient are you with this skill?</p>
       </div>
-    </div>
-    <div>
-      <label class="block text-sm font-medium text-gray-700">Icon URL</label>
-      <input name="iconUrl" type="url" placeholder="https://..." class="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" value="<%= skill.iconUrl || '' %>" />
-      <% if (skill.iconUrl) { %>
-        <img src="<%= skill.iconUrl %>" alt="preview" class="mt-2 h-12 w-12 object-contain" />
-      <% } %>
-    </div>
-    <div class="pt-2">
-      <button type="submit" class="inline-flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-md text-sm hover:bg-indigo-700">
-        <i data-lucide="save" class="w-4 h-4"></i>
-        <%= mode === 'edit' ? 'Update' : 'Create' %>
-      </button>
-    </div>
-  </form>
+      <div class="grid md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700">React Icons Library</label>
+          <input name="iconLib" placeholder="fa | si | io5 | md | ri | etc" class="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" value="<%= skill.iconLib || '' %>" />
+          <p class="text-xs text-gray-500 mt-1">Example: fa (FontAwesome), si (SimpleIcons), io5 (Ionicons v5).</p>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">React Icon Name</label>
+          <input name="iconName" placeholder="e.g. FaReact, SiMongodb" class="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" value="<%= skill.iconName || '' %>" />
+          <p class="text-xs text-gray-500 mt-1">Frontend will render: import { Icon } from react-icons/&lt;iconLib&gt;.</p>
+        </div>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Icon URL</label>
+        <input name="iconUrl" type="url" placeholder="https://..." class="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" value="<%= skill.iconUrl || '' %>" />
+        <% if (skill.iconUrl) { %>
+          <img src="<%= skill.iconUrl %>" alt="preview" class="mt-2 h-12 w-12 object-contain" />
+        <% } %>
+      </div>
+      <div class="pt-2 flex items-center gap-2">
+        <button type="submit" class="inline-flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-md text-sm hover:bg-indigo-700">
+          <i data-lucide="save" class="w-4 h-4"></i>
+          <%= mode === 'edit' ? 'Update' : 'Create' %>
+        </button>
+        <a href="/skills" class="inline-flex items-center gap-2 border px-4 py-2 rounded-md text-sm hover:bg-gray-50">
+          Cancel
+        </a>
+      </div>
+    </form>
+  </div>
 </section>

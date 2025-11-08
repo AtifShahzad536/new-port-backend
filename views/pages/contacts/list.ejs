@@ -6,7 +6,7 @@
     </h1>
   </div>
 
-  <div class="mt-6 bg-white border border-gray-200 rounded-lg overflow-hidden">
+  <div class="mt-6 bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
     <table class="min-w-full text-sm">
       <thead class="bg-gray-50 text-gray-600">
         <tr>
@@ -14,30 +14,40 @@
           <th class="text-left px-4 py-2">Name</th>
           <th class="text-left px-4 py-2">Email</th>
           <th class="text-left px-4 py-2">Message</th>
+          <th class="text-left px-4 py-2">Status</th>
           <th class="text-right px-4 py-2">Actions</th>
         </tr>
       </thead>
       <tbody>
         <% if (contacts && contacts.length) { %>
           <% contacts.forEach(c => { %>
-            <tr class="border-t">
+            <tr class="border-t hover:bg-gray-50/50">
               <td class="px-4 py-2 text-gray-500"><%= new Date(c.createdAt).toLocaleString() %></td>
               <td class="px-4 py-2 font-medium"><%= c.name %></td>
               <td class="px-4 py-2 text-indigo-600">
                 <a href="mailto:<%= c.email %>" class="hover:underline"><%= c.email %></a>
               </td>
-              <td class="px-4 py-2"><%= c.message %></td>
+              <td class="px-4 py-2 text-gray-700 max-w-md">
+                <div class="line-clamp-2"><%= c.message %></div>
+              </td>
+              <td class="px-4 py-2">
+                <% if (c.read) { %>
+                  <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">Read</span>
+                <% } else { %>
+                  <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200">New</span>
+                <% } %>
+              </td>
               <td class="px-4 py-2">
                 <div class="flex items-center gap-2 justify-end">
                   <% if (!c.read) { %>
                     <form action="/contacts/<%= c._id %>/read" method="post">
-                      <button class="inline-flex items-center gap-1 text-green-600 hover:underline" type="submit">
+                      <button class="inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs bg-emerald-600 text-white hover:bg-emerald-700" type="submit">
                         <i data-lucide="check" class="w-4 h-4"></i> Mark read
                       </button>
                     </form>
                   <% } %>
                   <form action="/contacts/<%= c._id %>/delete" method="post" onsubmit="return confirm('Delete this message?')">
-                    <button class="inline-flex items-center gap-1 text-red-600 hover:underline" type="submit">
+                    <button class="inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs bg-rose-600 text-white hover:bg-rose-700" type="submit">
                       <i data-lucide="trash" class="w-4 h-4"></i> Delete
                     </button>
                   </form>
@@ -47,7 +57,7 @@
           <% }) %>
         <% } else { %>
           <tr>
-            <td class="px-4 py-6 text-center text-gray-500" colspan="5">No messages yet.</td>
+            <td class="px-4 py-6 text-center text-gray-500" colspan="4">No messages yet.</td>
           </tr>
         <% } %>
       </tbody>

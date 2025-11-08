@@ -23,7 +23,7 @@
         </div>
         <!-- Mobile sidebar (drawer) -->
         <div id="mobileBackdrop" class="md:hidden fixed inset-0 z-40 bg-black/30 backdrop-blur-sm hidden"></div>
-        <aside id="mobileSidebar" class="md:hidden fixed z-50 inset-y-0 left-0 w-64 bg-white border-r border-gray-200 transform -translate-x-full transition-transform duration-200 ease-out flex flex-col">
+        <aside id="mobileSidebar" class="md:hidden fixed z-50 inset-y-0 left-0 w-64 bg-white border-r border-gray-200 transform -translate-x-full transition-transform duration-200 ease-out flex flex-col overflow-y-auto">
           <div class="h-14 flex items-center justify-between px-4 border-b">
             <div class="flex items-center gap-2">
               <i data-lucide="layout-dashboard" class="w-5 h-5 text-indigo-600"></i>
@@ -62,7 +62,7 @@
             </form>
           </nav>
         </aside>
-        <aside class="w-64 bg-white border-r border-gray-200 hidden md:flex md:flex-col">
+        <aside class="w-64 bg-white border-r border-gray-200 hidden md:flex md:flex-col sticky top-0 h-screen overflow-y-auto">
           <div class="h-14 flex items-center gap-2 px-4 border-b">
             <i data-lucide="layout-dashboard" class="w-5 h-5 text-indigo-600"></i>
             <span class="font-semibold"><%= appName || 'App' %></span>
