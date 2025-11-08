@@ -1,28 +1,41 @@
-import mongoose from 'mongoose'
+// db.js
+import mongoose from "mongoose";
 
-export async function connectDB () {
-  const uri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/portfolio'
-  const opts = {
-    autoIndex: true,
-    serverSelectionTimeoutMS: 8000
+const MONGODB_URI = process.env.MONGODB_URI;
+
+if (!MONGODB_URI) {
+  throw new Error("❌ MONGODB_URI is not defined in environment variables.");
+}
+
+/* 
+   Use global cache (important for Vercel)
+   so new serverless instances reuse the same connection
+*/
+let cached = global.mongoose;
+
+if (!cached) {
+  cached = global.mongoose = { conn: null, promise: null };
+}
+
+export async function connectDB() {
+  if (cached.conn) {
+    // ✅ Reuse existing connection
+    return cached.conn;
   }
 
-  mongoose.connection.on('connected', () => {
-    console.log('MongoDB connected')
-  })
-  mongoose.connection.on('error', (err) => {
-    console.error('MongoDB connection error:', err.message)
-  })
-  mongoose.connection.on('disconnected', () => {
-    console.warn('MongoDB disconnected')
-  })
+  if (!cached.promise) {
+    const opts = {
+      bufferCommands: false,
+      serverSelectionTimeoutMS: 8000, // optional
+    };
 
-  try {
-    console.log('Connecting to MongoDB ...')
-    await mongoose.connect(uri, opts)
-    return mongoose
-  } catch (err) {
-    console.error('Failed to connect to MongoDB:', err.message)
-    throw err
+    console.log("🔌 Connecting to MongoDB Atlas...");
+    cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
+      console.log("✅ MongoDB connected successfully");
+      return mongoose;
+    });
   }
+
+  cached.conn = await cached.promise;
+  return cached.conn;
 }

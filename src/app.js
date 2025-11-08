@@ -40,7 +40,8 @@ app.use(helmet({
   crossOriginEmbedderPolicy: false,
   crossOriginResourcePolicy: { policy: 'cross-origin' }
 }))
-app.use(cors())
+app.use(cors( 
+))
 app.use(compression())
 app.use(morgan('dev'))
 
