@@ -9,12 +9,31 @@ function buildSiteContext({ projects = [], skills = [], tools = [] }) {
   return `You are an AI assistant for Atif's portfolio website. Use the following site data to answer accurately about the site, projects, skills, and tools. If something is unknown, say you are not sure.\n\n[Projects]\n${projectsText}\n\n[Skills]\n${skillsText}\n\n[Tools]\n${toolsText}`
 }
 
+// GET /api/ai/models -> list available model ids supporting generateContent
+export async function listAvailableModels (req, res, next) {
+  try {
+    const apiKey = process.env.GEMINI_API_KEY
+    if (!apiKey) return res.status(500).json({ error: 'GEMINI_API_KEY not configured' })
+    const url = `https://generativelanguage.googleapis.com/v1beta/models?key=${encodeURIComponent(apiKey)}`
+    const resp = await fetch(url)
+    const data = await resp.json()
+    if (!resp.ok) {
+      return res.status(resp.status).json({ error: data?.error?.message || 'Failed to list models' })
+    }
+    const supportsGen = m => Array.isArray(m?.supportedGenerationMethods) && m.supportedGenerationMethods.includes('generateContent')
+    const ids = (data.models || []).filter(supportsGen).map(m => m.name.split('/').pop())
+    return res.json({ models: ids })
+  } catch (err) {
+    next(err)
+  }
+}
+
 export async function chat(req, res, next) {
   try {
     const apiKey = process.env.GEMINI_API_KEY
     if (!apiKey) return res.status(500).json({ error: 'GEMINI_API_KEY not configured' })
 
-    const { message } = req.body || {}
+    const { message, model: requestedModel } = req.body || {}
     if (!message || typeof message !== 'string') {
       return res.status(400).json({ error: 'message is required' })
     }
@@ -27,7 +46,9 @@ export async function chat(req, res, next) {
     ])
 
     const system = buildSiteContext({ projects, skills, tools })
-    const prompt = `${system}\n\nUser: ${message}\nAssistant:`
+    const tone = 'Speak concisely and naturally like a friendly human assistant.'
+    const cta = '\n\nIf helpful, you can also ask about Atif Shahzad for more info.'
+    const prompt = `${system}\n\nInstruction: ${tone}\n\nUser: ${message}\nAssistant:`
 
     // Discover available models and try them by priority
     async function listModels () {
@@ -57,7 +78,15 @@ export async function chat(req, res, next) {
     const otherCandidates = models
       .filter(m => supportsGen(m) && !preferred.some(n => m.name?.endsWith(`/models/${n}`)))
       .map(m => m.name.split('/').pop())
-    const candidates = [...preferredCandidates, ...otherCandidates]
+    let candidates = [...preferredCandidates, ...otherCandidates]
+    // If a specific model is requested and available, try it first
+    if (requestedModel) {
+      const rqName = requestedModel.startsWith('models/') ? requestedModel.split('/').pop() : requestedModel
+      const has = models.find(m => m.name?.endsWith(`/models/${rqName}`) && supportsGen(m))
+      if (has) {
+        candidates = [rqName, ...candidates.filter(n => n !== rqName)]
+      }
+    }
     if (!candidates.length) {
       return res.status(503).json({ error: 'AI_UNAVAILABLE', message: 'No Gemini model available for generateContent' })
     }
@@ -78,7 +107,9 @@ export async function chat(req, res, next) {
           if (resp.status === 429 || resp.status === 403) { lastError = data; continue }
           return res.status(resp.status).json({ error: 'AI_UNAVAILABLE', message: data?.error?.message || 'Gemini API error' })
         }
-        const text = data?.candidates?.[0]?.content?.parts?.map(p => p.text).join('\n') || 'Sorry, I could not generate a response.'
+        let text = data?.candidates?.[0]?.content?.parts?.map(p => p.text).join('\n') || 'Sorry, I could not generate a response.'
+        // Append CTA while keeping the answer
+        text = `${text}${cta}`
         return res.json({ reply: text, model })
       } catch (errApi) {
         lastError = { message: errApi?.message }
