@@ -29,5 +29,3 @@ coverage/
 Thumbs.db
 
 # Uploads (keep folder, ignore files)
-public/uploads/*
-!public/uploads/.gitkeep
